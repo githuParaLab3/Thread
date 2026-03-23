@@ -7,16 +7,16 @@
   --border-color: #262626;
   --text-color: #E5E5E5;
   --highlight-blue: #4DA3FF;
-  --highlight-green: #A3F7E5;
+  --highlight-green: #A3F7E5; 
   --highlight-red: #FF6B6B;
   --font-primary: 'Inter', sans-serif;
   --font-mono: 'Roboto Mono', monospace;
 }
 
 [data-theme='light'] {
+  /* LIGHT THEME (Reverso Industrial) */
   --bg-color: #F8F9FA;
   --surface-color: #FFFFFF;
-  --surface-hover: #F1F3F5;
   --border-color: #DEE2E6;
   --text-color: #212529;
   --highlight-blue: #228BE6;
@@ -34,7 +34,16 @@ body {
   background-size: 50px 50px;
 }
 
-h1, h2, h3, h4, h5, h6 { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.1em; }
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0;
+}
 
 button, input {
   font-family: inherit;
@@ -45,4 +54,8 @@ button, input {
   transition: all 0.2s ease;
 }
 
-button:hover { background-color: var(--surface-hover); border-color: var(--text-color); cursor: pointer; }
+button:hover {
+  background-color: var(--surface-hover);
+  border-color: var(--text-color);
+  cursor: pointer;
+}
