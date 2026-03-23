@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EncounterService } from '../encounter.service';
+import { ContextService } from '../../../../core/context.service';
 
 @Component({
   selector: 'app-encounter-list',
@@ -17,7 +18,8 @@ export class EncounterListComponent implements OnInit {
   constructor(
     private encounterService: EncounterService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private contextService: ContextService
   ) {}
 
   async ngOnInit() {
@@ -46,5 +48,10 @@ export class EncounterListComponent implements OnInit {
 
   openEncounter(encounterId: string) {
     this.router.navigate(['../encounter', encounterId], { relativeTo: this.route });
+  }
+
+  openInContext(event: Event, encounter: any) {
+    event.stopPropagation();
+    this.contextService.setContext({ type: 'encounter', data: encounter });
   }
 }

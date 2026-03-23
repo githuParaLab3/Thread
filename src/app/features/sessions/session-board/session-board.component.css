@@ -17,7 +17,7 @@
 .board-canvas {
   flex: 1;
   position: relative;
-  overflow: auto;
+  overflow: hidden;
 }
 
 .board-node {
@@ -29,6 +29,13 @@
   cursor: grab;
   color: var(--text-color);
   font-family: var(--font-primary);
+  user-select: none;
+}
+
+.board-node:active {
+  cursor: grabbing;
+  border-color: var(--highlight-red);
+  z-index: 100;
 }
 
 .action-btn {

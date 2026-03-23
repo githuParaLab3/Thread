@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MonsterService } from '../monster.service';
+import { ContextService } from '../../../../core/context.service';
 
 @Component({
   selector: 'app-monster-list',
@@ -16,7 +17,8 @@ export class MonsterListComponent implements OnInit {
   constructor(
     private monsterService: MonsterService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private contextService: ContextService
   ) {}
 
   async ngOnInit() {
@@ -39,5 +41,10 @@ export class MonsterListComponent implements OnInit {
 
   openMonster(monsterId: string) {
     this.router.navigate(['../monster', monsterId], { relativeTo: this.route });
+  }
+
+  openInContext(event: Event, monster: any) {
+    event.stopPropagation();
+    this.contextService.setContext({ type: 'monster', data: monster });
   }
 }

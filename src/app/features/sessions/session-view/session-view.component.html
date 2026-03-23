@@ -8,6 +8,11 @@
       <h2>#{{ session.number }} - {{ session.title }}</h2>
       <span class="date">{{ session.date | date:'shortDate' }}</span>
     </header>
-    <textarea class="editor-area" [(ngModel)]="session.summary" placeholder="Session notes..."></textarea>
+    <div class="split-view">
+      <textarea class="editor-area" [(ngModel)]="session.summary" placeholder="Session notes..."></textarea>
+      <div class="board-area">
+        <app-session-board [sessionId]="session.id"></app-session-board>
+      </div>
+    </div>
   </div>
 </div>

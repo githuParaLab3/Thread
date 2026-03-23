@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ResourceService } from '../resource.service';
+import { ContextService } from '../../../core/context.service';
 
 @Component({
   selector: 'app-resource-list',
@@ -17,7 +18,8 @@ export class ResourceListComponent implements OnInit {
   constructor(
     private resourceService: ResourceService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private contextService: ContextService
   ) {}
 
   async ngOnInit() {
@@ -46,5 +48,10 @@ export class ResourceListComponent implements OnInit {
 
   openResource(resourceId: string) {
     this.router.navigate(['../resource', resourceId], { relativeTo: this.route });
+  }
+
+  openInContext(event: Event, resource: any) {
+    event.stopPropagation();
+    this.contextService.setContext({ type: 'resource', data: resource });
   }
 }

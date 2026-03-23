@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NpcService } from '../npc.service';
+import { ContextService } from '../../../../core/context.service';
 
 @Component({
   selector: 'app-npc-list',
@@ -17,7 +18,8 @@ export class NpcListComponent implements OnInit {
   constructor(
     private npcService: NpcService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private contextService: ContextService
   ) {}
 
   async ngOnInit() {
@@ -46,5 +48,10 @@ export class NpcListComponent implements OnInit {
 
   openNpc(npcId: string) {
     this.router.navigate(['../npc', npcId], { relativeTo: this.route });
+  }
+
+  openInContext(event: Event, npc: any) {
+    event.stopPropagation();
+    this.contextService.setContext({ type: 'npc', data: npc });
   }
 }

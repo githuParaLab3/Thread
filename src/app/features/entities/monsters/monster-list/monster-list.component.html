@@ -7,6 +7,7 @@
   <div class="monster-grid">
     <div *ngFor="let monster of monsters" class="monster-card" (click)="openMonster(monster.id)">
       <h3>{{ monster.name }}</h3>
+      <button class="context-btn" (click)="openInContext($event, monster)">[ CONTEXT ]</button>
     </div>
   </div>
 </div>

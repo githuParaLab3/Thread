@@ -3,7 +3,12 @@
     <button class="action-btn" (click)="addNode()">[ + ADD NODE ]</button>
   </div>
   <div class="board-canvas">
-    <div class="board-node" *ngFor="let node of nodes" [style.left.px]="node.x" [style.top.px]="node.y">
+    <div 
+      class="board-node" 
+      *ngFor="let node of nodes" 
+      [style.left.px]="node.pos_x" 
+      [style.top.px]="node.pos_y"
+      (mousedown)="onMouseDown($event, node)">
       {{ node.title }}
     </div>
   </div>

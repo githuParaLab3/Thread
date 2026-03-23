@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CharacterService } from '../character.service';
+import { ContextService } from '../../../../core/context.service';
 
 @Component({
   selector: 'app-character-list',
@@ -17,7 +18,8 @@ export class CharacterListComponent implements OnInit {
   constructor(
     private characterService: CharacterService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private contextService: ContextService
   ) {}
 
   async ngOnInit() {
@@ -46,5 +48,10 @@ export class CharacterListComponent implements OnInit {
 
   openCharacter(characterId: string) {
     this.router.navigate(['../character', characterId], { relativeTo: this.route });
+  }
+
+  openInContext(event: Event, character: any) {
+    event.stopPropagation();
+    this.contextService.setContext({ type: 'character', data: character });
   }
 }

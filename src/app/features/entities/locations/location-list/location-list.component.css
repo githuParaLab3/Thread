@@ -31,6 +31,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  min-height: 120px;
 }
 
 .location-card:hover {
@@ -50,4 +51,21 @@
   color: var(--text-color);
   font-size: 1.1rem;
   margin: 0.5rem 0;
+}
+
+.context-btn {
+  margin-top: auto;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--highlight-green);
+  padding: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.context-btn:hover {
+  background-color: var(--highlight-green);
+  color: var(--bg-color);
 }

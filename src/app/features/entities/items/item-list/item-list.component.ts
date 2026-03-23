@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ItemService } from '../item.service';
+import { ContextService } from '../../../../core/context.service';
 
 @Component({
   selector: 'app-item-list',
@@ -17,7 +18,8 @@ export class ItemListComponent implements OnInit {
   constructor(
     private itemService: ItemService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private contextService: ContextService
   ) {}
 
   async ngOnInit() {
@@ -47,5 +49,10 @@ export class ItemListComponent implements OnInit {
 
   openItem(itemId: string) {
     this.router.navigate(['../item', itemId], { relativeTo: this.route });
+  }
+
+  openInContext(event: Event, item: any) {
+    event.stopPropagation();
+    this.contextService.setContext({ type: 'item', data: item });
   }
 }

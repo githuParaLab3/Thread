@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NoteService } from '../note.service';
+import { ContextService } from '../../../core/context.service'
 
 @Component({
   selector: 'app-note-list',
@@ -17,7 +18,8 @@ export class NoteListComponent implements OnInit {
   constructor(
     private noteService: NoteService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private contextService: ContextService
   ) {}
 
   async ngOnInit() {
@@ -39,7 +41,6 @@ export class NoteListComponent implements OnInit {
     if (!this.campaignId) return;
     const title = prompt('Título da Nota:');
     if (!title) return;
-    
     const type = prompt('Tipo (lore, event, consequence, idea):') || 'lore';
     await this.noteService.createNote(this.campaignId, title, type);
     await this.loadNotes();
@@ -47,5 +48,10 @@ export class NoteListComponent implements OnInit {
 
   openNote(noteId: string) {
     this.router.navigate(['../note', noteId], { relativeTo: this.route });
+  }
+
+  openInContext(event: Event, note: any) {
+    event.stopPropagation();
+    this.contextService.setContext({ type: 'note', data: note });
   }
 }

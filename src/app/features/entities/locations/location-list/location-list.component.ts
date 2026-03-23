@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocationService } from '../location.service';
+import { ContextService } from '../../../../core/context.service';
 
 @Component({
   selector: 'app-location-list',
@@ -17,7 +18,8 @@ export class LocationListComponent implements OnInit {
   constructor(
     private locationService: LocationService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private contextService: ContextService
   ) {}
 
   async ngOnInit() {
@@ -46,5 +48,10 @@ export class LocationListComponent implements OnInit {
 
   openLocation(locationId: string) {
     this.router.navigate(['../location', locationId], { relativeTo: this.route });
+  }
+
+  openInContext(event: Event, location: any) {
+    event.stopPropagation();
+    this.contextService.setContext({ type: 'location', data: location });
   }
 }

@@ -4,11 +4,12 @@ import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { SessionService } from '../session.service';
 import { RelationPanelComponent } from '../../../shared/components/relation-panel/relation-panel.component';
+import { SessionBoardComponent } from '../session-board/session-board.component';
 
 @Component({
   selector: 'app-session-view',
   standalone: true,
-  imports: [CommonModule, FormsModule, RelationPanelComponent],
+  imports: [CommonModule, FormsModule, RelationPanelComponent, SessionBoardComponent],
   templateUrl: './session-view.component.html',
   styleUrls: ['./session-view.component.css']
 })

@@ -12,6 +12,7 @@
       </div>
       <h3>{{ npc.name }}</h3>
       <span class="enemy-badge" *ngIf="npc.is_enemy">HOSTILE</span>
+      <button class="context-btn" (click)="openInContext($event, npc)">[ CONTEXT ]</button>
     </div>
   </div>
 </div>

@@ -11,6 +11,7 @@
         <span class="character-level">LVL {{ character.level || 1 }}</span>
       </div>
       <h3>{{ character.name }}</h3>
+      <button class="context-btn" (click)="openInContext($event, character)">[ CONTEXT ]</button>
     </div>
   </div>
 </div>

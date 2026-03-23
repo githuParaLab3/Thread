@@ -11,6 +11,7 @@
         <span class="note-date">{{ note.updated_at | date:'shortDate' }}</span>
       </div>
       <h3>{{ note.title }}</h3>
+      <button class="context-btn" (click)="openInContext($event, note)">[ CONTEXT ]</button>
     </div>
   </div>
 </div>

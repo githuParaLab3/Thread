@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SessionBoardService } from '../session-board.service';
 
 @Component({
   selector: 'app-session-board',
@@ -9,11 +10,62 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./session-board.component.css']
 })
 export class SessionBoardComponent implements OnInit {
+  @Input() sessionId!: string;
   nodes: any[] = [];
+  isDragging = false;
+  draggedNode: any = null;
+  offsetX = 0;
+  offsetY = 0;
 
-  ngOnInit() {}
+  constructor(private boardService: SessionBoardService) {}
 
-  addNode() {
-    this.nodes.push({ id: Date.now(), x: 50, y: 50, title: 'NEW NODE' });
+  async ngOnInit() {
+    if (this.sessionId) {
+      await this.loadNodes();
+    }
+  }
+
+  async loadNodes() {
+    const { data } = await this.boardService.getNodes(this.sessionId);
+    if (data) {
+      this.nodes = data;
+    }
+  }
+
+  async addNode() {
+    const title = prompt('Título do nó:');
+    if (!title) return;
+    const { data } = await this.boardService.saveNode(this.sessionId, title, 50, 50);
+    if (data) {
+      this.nodes.push(data[0]);
+    }
+  }
+
+  onMouseDown(event: MouseEvent, node: any) {
+    this.isDragging = true;
+    this.draggedNode = node;
+    this.offsetX = event.clientX - node.pos_x;
+    this.offsetY = event.clientY - node.pos_y;
+  }
+
+  @HostListener('document:mousemove', ['$event'])
+  onMouseMove(event: MouseEvent) {
+    if (this.isDragging && this.draggedNode) {
+      this.draggedNode.pos_x = event.clientX - this.offsetX;
+      this.draggedNode.pos_y = event.clientY - this.offsetY;
+    }
+  }
+
+  @HostListener('document:mouseup')
+  async onMouseUp() {
+    if (this.isDragging && this.draggedNode) {
+      await this.boardService.updateNodePosition(
+        this.draggedNode.id,
+        this.draggedNode.pos_x,
+        this.draggedNode.pos_y
+      );
+      this.isDragging = false;
+      this.draggedNode = null;
+    }
   }
 }

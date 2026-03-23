@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MapService } from '../map.service';
+import { ContextService } from '../../../../core/context.service';
 
 @Component({
   selector: 'app-map-list',
@@ -17,7 +18,8 @@ export class MapListComponent implements OnInit {
   constructor(
     private mapService: MapService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private contextService: ContextService
   ) {}
 
   async ngOnInit() {
@@ -46,5 +48,10 @@ export class MapListComponent implements OnInit {
 
   openMap(mapId: string) {
     this.router.navigate(['../map', mapId], { relativeTo: this.route });
+  }
+
+  openInContext(event: Event, mapData: any) {
+    event.stopPropagation();
+    this.contextService.setContext({ type: 'map', data: mapData });
   }
 }

@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ContextService } from '../../context.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-campaign-layout',
@@ -9,12 +11,34 @@ import { CommonModule } from '@angular/common';
   templateUrl: './campaign-layout.component.html',
   styleUrls: ['./campaign-layout.component.css']
 })
-export class CampaignLayoutComponent implements OnInit {
+export class CampaignLayoutComponent implements OnInit, OnDestroy {
   isSidePanelOpen = false;
+  activeContext: any = null;
+  private contextSub!: Subscription;
 
-  ngOnInit() {}
+  constructor(private contextService: ContextService) {}
+
+  ngOnInit() {
+    this.contextSub = this.contextService.activeContext$.subscribe(context => {
+      this.activeContext = context;
+      if (context) {
+        this.isSidePanelOpen = true;
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.contextSub) {
+      this.contextSub.unsubscribe();
+    }
+  }
 
   toggleSidePanel() {
     this.isSidePanelOpen = !this.isSidePanelOpen;
+  }
+
+  closePanel() {
+    this.isSidePanelOpen = false;
+    this.contextService.clearContext();
   }
 }
