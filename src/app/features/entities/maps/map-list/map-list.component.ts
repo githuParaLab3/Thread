@@ -1,19 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { MapService } from '../map.service';
 import { ContextService } from '../../../../core/context.service';
 
 @Component({
   selector: 'app-map-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './map-list.component.html',
   styleUrls: ['./map-list.component.css']
 })
 export class MapListComponent implements OnInit {
   maps: any[] = [];
+  filteredMaps: any[] = [];
   campaignId: string | null = null;
+  searchTerm: string = '';
 
   constructor(
     private mapService: MapService,
@@ -34,7 +37,20 @@ export class MapListComponent implements OnInit {
     const { data } = await this.mapService.getMaps(this.campaignId);
     if (data) {
       this.maps = data;
+      this.filteredMaps = data;
     }
+  }
+
+  filterData() {
+    const term = this.searchTerm.toLowerCase().trim();
+    if (!term) {
+      this.filteredMaps = this.maps;
+      return;
+    }
+    this.filteredMaps = this.maps.filter(mapItem =>
+      mapItem.name.toLowerCase().includes(term) ||
+      (mapItem.type && mapItem.type.toLowerCase().includes(term))
+    );
   }
 
   async createNewMap() {

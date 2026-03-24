@@ -1,19 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { ResourceService } from '../resource.service';
 import { ContextService } from '../../../core/context.service';
 
 @Component({
   selector: 'app-resource-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './resource-list.component.html',
   styleUrls: ['./resource-list.component.css']
 })
 export class ResourceListComponent implements OnInit {
   resources: any[] = [];
+  filteredResources: any[] = [];
   campaignId: string | null = null;
+  searchTerm: string = '';
 
   constructor(
     private resourceService: ResourceService,
@@ -34,7 +37,20 @@ export class ResourceListComponent implements OnInit {
     const { data } = await this.resourceService.getResources(this.campaignId);
     if (data) {
       this.resources = data;
+      this.filteredResources = data;
     }
+  }
+
+  filterData() {
+    const term = this.searchTerm.toLowerCase().trim();
+    if (!term) {
+      this.filteredResources = this.resources;
+      return;
+    }
+    this.filteredResources = this.resources.filter(resource =>
+      resource.title.toLowerCase().includes(term) ||
+      (resource.type && resource.type.toLowerCase().includes(term))
+    );
   }
 
   async createNewResource() {

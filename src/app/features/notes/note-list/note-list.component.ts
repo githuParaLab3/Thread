@@ -1,19 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { NoteService } from '../note.service';
-import { ContextService } from '../../../core/context.service'
+import { ContextService } from '../../../core/context.service';
 
 @Component({
   selector: 'app-note-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './note-list.component.html',
   styleUrls: ['./note-list.component.css']
 })
 export class NoteListComponent implements OnInit {
   notes: any[] = [];
+  filteredNotes: any[] = [];
   campaignId: string | null = null;
+  searchTerm: string = '';
 
   constructor(
     private noteService: NoteService,
@@ -34,7 +37,20 @@ export class NoteListComponent implements OnInit {
     const { data } = await this.noteService.getNotes(this.campaignId);
     if (data) {
       this.notes = data;
+      this.filteredNotes = data;
     }
+  }
+
+  filterData() {
+    const term = this.searchTerm.toLowerCase().trim();
+    if (!term) {
+      this.filteredNotes = this.notes;
+      return;
+    }
+    this.filteredNotes = this.notes.filter(note =>
+      note.title.toLowerCase().includes(term) ||
+      (note.type && note.type.toLowerCase().includes(term))
+    );
   }
 
   async createNewNote() {

@@ -1,11 +1,22 @@
 <div class="npc-list-container">
   <header class="section-header">
     <h2>NON-PLAYER CHARACTERS</h2>
-    <button class="action-btn" (click)="createNewNpc()">[ + NEW NPC ]</button>
+    <div class="header-actions">
+      <div class="local-search-box">
+        <span class="material-symbols-outlined search-icon">search</span>
+        <input 
+          type="text" 
+          placeholder="SEARCH NPCS..." 
+          class="search-input"
+          [(ngModel)]="searchTerm"
+          (input)="filterData()">
+      </div>
+      <button class="action-btn" (click)="createNewNpc()">[ + NEW NPC ]</button>
+    </div>
   </header>
 
   <div class="npc-grid">
-    <div *ngFor="let npc of npcs" class="npc-card" (click)="openNpc(npc.id)">
+    <div *ngFor="let npc of filteredNpcs" class="npc-card" (click)="openNpc(npc.id)">
       <div class="npc-meta">
         <span class="npc-role">{{ npc.role }}</span>
         <span class="npc-status" *ngIf="npc.status">{{ npc.status }}</span>
@@ -14,5 +25,9 @@
       <span class="enemy-badge" *ngIf="npc.is_enemy">HOSTILE</span>
       <button class="context-btn" (click)="openInContext($event, npc)">[ CONTEXT ]</button>
     </div>
+  </div>
+
+  <div class="empty-state" *ngIf="filteredNpcs.length === 0">
+    <p>NO RECORDS FOUND.</p>
   </div>
 </div>

@@ -1,13 +1,28 @@
 <div class="monster-list-container">
   <header class="section-header">
     <h2>MONSTER COMPENDIUM</h2>
-    <button class="action-btn" (click)="createNewMonster()">[ + NEW MONSTER ]</button>
+    <div class="header-actions">
+      <div class="local-search-box">
+        <span class="material-symbols-outlined search-icon">search</span>
+        <input 
+          type="text" 
+          placeholder="SEARCH MONSTERS..." 
+          class="search-input"
+          [(ngModel)]="searchTerm"
+          (input)="filterData()">
+      </div>
+      <button class="action-btn" (click)="createNewMonster()">[ + NEW MONSTER ]</button>
+    </div>
   </header>
 
   <div class="monster-grid">
-    <div *ngFor="let monster of monsters" class="monster-card" (click)="openMonster(monster.id)">
+    <div *ngFor="let monster of filteredMonsters" class="monster-card" (click)="openMonster(monster.id)">
       <h3>{{ monster.name }}</h3>
       <button class="context-btn" (click)="openInContext($event, monster)">[ CONTEXT ]</button>
     </div>
+  </div>
+
+  <div class="empty-state" *ngIf="filteredMonsters.length === 0">
+    <p>NO RECORDS FOUND.</p>
   </div>
 </div>

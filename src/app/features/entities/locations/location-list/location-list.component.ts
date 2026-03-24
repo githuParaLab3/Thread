@@ -1,19 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { LocationService } from '../location.service';
 import { ContextService } from '../../../../core/context.service';
 
 @Component({
   selector: 'app-location-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './location-list.component.html',
   styleUrls: ['./location-list.component.css']
 })
 export class LocationListComponent implements OnInit {
   locations: any[] = [];
+  filteredLocations: any[] = [];
   campaignId: string | null = null;
+  searchTerm: string = '';
 
   constructor(
     private locationService: LocationService,
@@ -34,7 +37,20 @@ export class LocationListComponent implements OnInit {
     const { data } = await this.locationService.getLocations(this.campaignId);
     if (data) {
       this.locations = data;
+      this.filteredLocations = data;
     }
+  }
+
+  filterData() {
+    const term = this.searchTerm.toLowerCase().trim();
+    if (!term) {
+      this.filteredLocations = this.locations;
+      return;
+    }
+    this.filteredLocations = this.locations.filter(location =>
+      location.name.toLowerCase().includes(term) ||
+      (location.type && location.type.toLowerCase().includes(term))
+    );
   }
 
   async createNewLocation() {

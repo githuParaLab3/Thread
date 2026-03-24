@@ -1,19 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { ItemService } from '../item.service';
 import { ContextService } from '../../../../core/context.service';
 
 @Component({
   selector: 'app-item-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './item-list.component.html',
   styleUrls: ['./item-list.component.css']
 })
 export class ItemListComponent implements OnInit {
   items: any[] = [];
+  filteredItems: any[] = [];
   campaignId: string | null = null;
+  searchTerm: string = '';
 
   constructor(
     private itemService: ItemService,
@@ -34,7 +37,19 @@ export class ItemListComponent implements OnInit {
     const { data } = await this.itemService.getItems(this.campaignId);
     if (data) {
       this.items = data;
+      this.filteredItems = data;
     }
+  }
+
+  filterData() {
+    const term = this.searchTerm.toLowerCase().trim();
+    if (!term) {
+      this.filteredItems = this.items;
+      return;
+    }
+    this.filteredItems = this.items.filter(item =>
+      item.name.toLowerCase().includes(term)
+    );
   }
 
   async createNewItem() {

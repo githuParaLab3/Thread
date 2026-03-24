@@ -1,16 +1,31 @@
 <div class="item-list-container">
   <header class="section-header">
-    <h2>ITEMS & INVENTORY</h2>
-    <button class="action-btn" (click)="createNewItem()">[ + NEW ITEM ]</button>
+    <h2>INVENTORY & ITEMS</h2>
+    <div class="header-actions">
+      <div class="local-search-box">
+        <span class="material-symbols-outlined search-icon">search</span>
+        <input 
+          type="text" 
+          placeholder="SEARCH ITEMS..." 
+          class="search-input"
+          [(ngModel)]="searchTerm"
+          (input)="filterData()">
+      </div>
+      <button class="action-btn" (click)="createNewItem()">[ + NEW ITEM ]</button>
+    </div>
   </header>
 
   <div class="item-grid">
-    <div *ngFor="let item of items" class="item-card" (click)="openItem(item.id)">
+    <div *ngFor="let item of filteredItems" class="item-card" (click)="openItem(item.id)">
       <div class="item-meta">
         <span class="item-value">{{ item.value }} GP</span>
       </div>
       <h3>{{ item.name }}</h3>
       <button class="context-btn" (click)="openInContext($event, item)">[ CONTEXT ]</button>
     </div>
+  </div>
+
+  <div class="empty-state" *ngIf="filteredItems.length === 0">
+    <p>NO RECORDS FOUND.</p>
   </div>
 </div>

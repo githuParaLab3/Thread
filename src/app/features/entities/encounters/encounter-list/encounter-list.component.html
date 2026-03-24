@@ -1,16 +1,31 @@
 <div class="encounter-list-container">
   <header class="section-header">
     <h2>ENCOUNTERS</h2>
-    <button class="action-btn" (click)="createNewEncounter()">[ + NEW ENCOUNTER ]</button>
+    <div class="header-actions">
+      <div class="local-search-box">
+        <span class="material-symbols-outlined search-icon">search</span>
+        <input 
+          type="text" 
+          placeholder="SEARCH ENCOUNTERS..." 
+          class="search-input"
+          [(ngModel)]="searchTerm"
+          (input)="filterData()">
+      </div>
+      <button class="action-btn" (click)="createNewEncounter()">[ + NEW ENCOUNTER ]</button>
+    </div>
   </header>
 
   <div class="encounter-grid">
-    <div *ngFor="let encounter of encounters" class="encounter-card" (click)="openEncounter(encounter.id)">
+    <div *ngFor="let encounter of filteredEncounters" class="encounter-card" (click)="openEncounter(encounter.id)">
       <div class="encounter-meta">
         <span class="encounter-difficulty">{{ encounter.difficulty }}</span>
       </div>
       <h3>{{ encounter.name }}</h3>
       <button class="context-btn" (click)="openInContext($event, encounter)">[ CONTEXT ]</button>
     </div>
+  </div>
+
+  <div class="empty-state" *ngIf="filteredEncounters.length === 0">
+    <p>NO RECORDS FOUND.</p>
   </div>
 </div>

@@ -1,16 +1,31 @@
 <div class="resource-list-container">
   <header class="section-header">
     <h2>EXTERNAL RESOURCES</h2>
-    <button class="action-btn" (click)="createNewResource()">[ + NEW RESOURCE ]</button>
+    <div class="header-actions">
+      <div class="local-search-box">
+        <span class="material-symbols-outlined search-icon">search</span>
+        <input 
+          type="text" 
+          placeholder="SEARCH RESOURCES..." 
+          class="search-input"
+          [(ngModel)]="searchTerm"
+          (input)="filterData()">
+      </div>
+      <button class="action-btn" (click)="createNewResource()">[ + NEW RESOURCE ]</button>
+    </div>
   </header>
 
   <div class="resource-grid">
-    <div *ngFor="let resource of resources" class="resource-card" (click)="openResource(resource.id)">
+    <div *ngFor="let resource of filteredResources" class="resource-card" (click)="openResource(resource.id)">
       <div class="resource-meta">
         <span>{{ resource.type }}</span>
       </div>
       <h3>{{ resource.title }}</h3>
       <button class="context-btn" (click)="openInContext($event, resource)">[ CONTEXT ]</button>
     </div>
+  </div>
+
+  <div class="empty-state" *ngIf="filteredResources.length === 0">
+    <p>NO RECORDS FOUND.</p>
   </div>
 </div>

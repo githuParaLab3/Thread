@@ -1,17 +1,32 @@
 <div class="character-list-container">
   <header class="section-header">
     <h2>PLAYER CHARACTERS</h2>
-    <button class="action-btn" (click)="createNewCharacter()">[ + NEW CHARACTER ]</button>
+    <div class="header-actions">
+      <div class="local-search-box">
+        <span class="material-symbols-outlined search-icon">search</span>
+        <input 
+          type="text" 
+          placeholder="SEARCH CHARACTERS..." 
+          class="search-input"
+          [(ngModel)]="searchTerm"
+          (input)="filterData()">
+      </div>
+      <button class="action-btn" (click)="createNewCharacter()">[ + NEW CHARACTER ]</button>
+    </div>
   </header>
 
   <div class="character-grid">
-    <div *ngFor="let character of characters" class="character-card" (click)="openCharacter(character.id)">
+    <div *ngFor="let character of filteredCharacters" class="character-card" (click)="openCharacter(character.id)">
       <div class="character-meta">
         <span class="character-class">{{ character.class }}</span>
-        <span class="character-level">LVL {{ character.level || 1 }}</span>
+        <span class="character-level" *ngIf="character.level">LVL {{ character.level }}</span>
       </div>
       <h3>{{ character.name }}</h3>
       <button class="context-btn" (click)="openInContext($event, character)">[ CONTEXT ]</button>
     </div>
+  </div>
+
+  <div class="empty-state" *ngIf="filteredCharacters.length === 0">
+    <p>NO RECORDS FOUND.</p>
   </div>
 </div>

@@ -1,19 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { NpcService } from '../npc.service';
 import { ContextService } from '../../../../core/context.service';
 
 @Component({
   selector: 'app-npc-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './npc-list.component.html',
   styleUrls: ['./npc-list.component.css']
 })
 export class NpcListComponent implements OnInit {
   npcs: any[] = [];
+  filteredNpcs: any[] = [];
   campaignId: string | null = null;
+  searchTerm: string = '';
 
   constructor(
     private npcService: NpcService,
@@ -34,7 +37,20 @@ export class NpcListComponent implements OnInit {
     const { data } = await this.npcService.getNpcs(this.campaignId);
     if (data) {
       this.npcs = data;
+      this.filteredNpcs = data;
     }
+  }
+
+  filterData() {
+    const term = this.searchTerm.toLowerCase().trim();
+    if (!term) {
+      this.filteredNpcs = this.npcs;
+      return;
+    }
+    this.filteredNpcs = this.npcs.filter(npc =>
+      npc.name.toLowerCase().includes(term) ||
+      (npc.role && npc.role.toLowerCase().includes(term))
+    );
   }
 
   async createNewNpc() {

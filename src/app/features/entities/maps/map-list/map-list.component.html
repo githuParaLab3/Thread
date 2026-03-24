@@ -1,16 +1,31 @@
 <div class="map-list-container">
   <header class="section-header">
     <h2>MAPS & CARTOGRAPHY</h2>
-    <button class="action-btn" (click)="createNewMap()">[ + NEW MAP ]</button>
+    <div class="header-actions">
+      <div class="local-search-box">
+        <span class="material-symbols-outlined search-icon">search</span>
+        <input 
+          type="text" 
+          placeholder="SEARCH MAPS..." 
+          class="search-input"
+          [(ngModel)]="searchTerm"
+          (input)="filterData()">
+      </div>
+      <button class="action-btn" (click)="createNewMap()">[ + NEW MAP ]</button>
+    </div>
   </header>
 
   <div class="map-grid">
-    <div *ngFor="let map of maps" class="map-card" (click)="openMap(map.id)">
+    <div *ngFor="let map of filteredMaps" class="map-card" (click)="openMap(map.id)">
       <div class="map-meta">
         <span>{{ map.type }}</span>
       </div>
       <h3>{{ map.name }}</h3>
       <button class="context-btn" (click)="openInContext($event, map)">[ CONTEXT ]</button>
     </div>
+  </div>
+
+  <div class="empty-state" *ngIf="filteredMaps.length === 0">
+    <p>NO RECORDS FOUND.</p>
   </div>
 </div>

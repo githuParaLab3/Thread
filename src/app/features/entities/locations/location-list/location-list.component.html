@@ -1,16 +1,31 @@
 <div class="location-list-container">
   <header class="section-header">
     <h2>LOCATIONS</h2>
-    <button class="action-btn" (click)="createNewLocation()">[ + NEW LOCATION ]</button>
+    <div class="header-actions">
+      <div class="local-search-box">
+        <span class="material-symbols-outlined search-icon">search</span>
+        <input 
+          type="text" 
+          placeholder="SEARCH LOCATIONS..." 
+          class="search-input"
+          [(ngModel)]="searchTerm"
+          (input)="filterData()">
+      </div>
+      <button class="action-btn" (click)="createNewLocation()">[ + NEW LOCATION ]</button>
+    </div>
   </header>
 
   <div class="location-grid">
-    <div *ngFor="let location of locations" class="location-card" (click)="openLocation(location.id)">
+    <div *ngFor="let location of filteredLocations" class="location-card" (click)="openLocation(location.id)">
       <div class="location-meta">
         <span class="location-type">{{ location.type }}</span>
       </div>
       <h3>{{ location.name }}</h3>
       <button class="context-btn" (click)="openInContext($event, location)">[ CONTEXT ]</button>
     </div>
+  </div>
+
+  <div class="empty-state" *ngIf="filteredLocations.length === 0">
+    <p>NO RECORDS FOUND.</p>
   </div>
 </div>
