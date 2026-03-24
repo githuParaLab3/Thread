@@ -62,8 +62,8 @@
         <button class="icon-btn" (click)="toggleSidebar()">
           <span class="material-symbols-outlined">{{ isSidebarCollapsed ? 'menu' : 'menu_open' }}</span>
         </button>
-        <button class="icon-btn" (click)="themeService.toggle()">
-          <span class="material-symbols-outlined">{{ themeService.current === 'dark' ? 'light_mode' : 'dark_mode' }}</span>
+        <button class="icon-btn" (click)="themeService.toggleTheme()">
+          <span class="material-symbols-outlined">{{ themeService.isDarkMode ? 'light_mode' : 'dark_mode' }}</span>
         </button>
       </div>
 

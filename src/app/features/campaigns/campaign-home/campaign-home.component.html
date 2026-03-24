@@ -5,7 +5,10 @@
       <input type="text" class="title-input" [(ngModel)]="campaign.name" (change)="saveCampaign()">
       <textarea class="hakari-input description-area" [(ngModel)]="campaign.description" (change)="saveCampaign()" placeholder="Campaign Description..."></textarea>
     </div>
-    <button class="action-btn btn-danger" (click)="openDeleteModal()">[ DELETE CAMPAIGN ]</button>
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <button class="action-btn" (click)="exportCampaignData()">[ EXPORT JSON ]</button>
+      <button class="action-btn btn-danger" (click)="openDeleteModal()">[ DELETE CAMPAIGN ]</button>
+    </div>
   </header>
 
   <div class="hakari-grid">

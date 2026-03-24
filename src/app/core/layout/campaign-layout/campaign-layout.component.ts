@@ -6,7 +6,7 @@ import { Subscription, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ContextService } from '../../context.service';
 import { ThemeService } from '../../theme.service';
-import { GlobalSearchService, SearchResult } from '../../../core/global-search.service';
+import { GlobalSearchService, SearchResult } from '../../global-search.service';
 import { RealtimeSyncService } from '../../realtime-sync.service';
 
 @Component({
@@ -39,6 +39,12 @@ export class CampaignLayoutComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.campaignId = this.route.snapshot.firstChild?.paramMap.get('id') || null;
+
+    const savedSidebar = localStorage.getItem('hakari_sidebar_collapsed');
+    if (savedSidebar === 'true') {
+      this.isSidebarCollapsed = true;
+    }
+
     this.realtimeSync.initGlobalSubscription();
 
     this.contextSub = this.contextService.activeContext$.subscribe(context => {
@@ -86,6 +92,7 @@ export class CampaignLayoutComponent implements OnInit, OnDestroy {
 
   toggleSidebar() {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
+    localStorage.setItem('hakari_sidebar_collapsed', String(this.isSidebarCollapsed));
   }
 
   toggleSidePanel() {

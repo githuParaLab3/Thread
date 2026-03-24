@@ -3,6 +3,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CampaignService } from '../campaign.service';
+import { SupabaseService } from '../../../core/supabase.service';
 import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
 
 @Component({
@@ -19,7 +20,8 @@ export class CampaignHomeComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private campaignService: CampaignService
+    private campaignService: CampaignService,
+    private supabaseService: SupabaseService
   ) {}
 
   async ngOnInit() {
@@ -52,5 +54,40 @@ export class CampaignHomeComponent implements OnInit {
       await this.campaignService.deleteCampaign(this.campaign.id);
       this.router.navigate(['/dashboard']);
     }
+  }
+
+  async exportCampaignData() {
+    if (!this.campaign) return;
+
+    const tables = [
+      'sessions', 'notes', 'npcs', 'locations', 'items', 
+      'characters', 'encounters', 'maps', 'resources'
+    ];
+    
+    const exportData: any = {
+      manifest: {
+        timestamp: new Date().toISOString(),
+        version: 'HAKARI_1.0'
+      },
+      campaign: this.campaign
+    };
+
+    for (const table of tables) {
+      const { data } = await this.supabaseService.client
+        .from(table)
+        .select('*')
+        .eq('campaign_id', this.campaign.id);
+      exportData[table] = data || [];
+    }
+
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = window.URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `HAKARI_EXPORT_${this.campaign.name.replace(/\s+/g, '_').toUpperCase()}_${Date.now()}.json`;
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+    window.URL.revokeObjectURL(url);
   }
 }

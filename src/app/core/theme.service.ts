@@ -1,24 +1,32 @@
 import { Injectable } from '@angular/core';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class ThemeService {
-  private theme: 'dark' | 'light' = 'dark';
+  isDarkMode = true;
 
   constructor() {
-    const saved = localStorage.getItem('theme') as 'dark' | 'light';
-    if (saved) this.setTheme(saved);
-    else this.setTheme('dark');
+    const saved = localStorage.getItem('hakari_theme');
+    if (saved !== null) {
+      this.isDarkMode = saved === 'true';
+    }
+    this.applyTheme();
   }
 
-  setTheme(t: 'dark' | 'light') {
-    this.theme = t;
-    document.documentElement.setAttribute('data-theme', t);
-    localStorage.setItem('theme', t);
+  toggleTheme() {
+    this.isDarkMode = !this.isDarkMode;
+    localStorage.setItem('hakari_theme', String(this.isDarkMode));
+    this.applyTheme();
   }
 
-  toggle() {
-    this.setTheme(this.theme === 'dark' ? 'light' : 'dark');
+  private applyTheme() {
+    const theme = this.isDarkMode ? 'dark' : 'light';
+    
+    document.documentElement.setAttribute('data-theme', theme);
+    
+    document.body.classList.remove('dark-theme', 'light-theme', 'theme-dark', 'theme-light');
+    document.body.classList.add(`${theme}-theme`);
+    document.body.classList.add(`theme-${theme}`);
   }
-
-  get current() { return this.theme; }
 }
