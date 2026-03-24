@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ResourceService } from '../resource.service';
 import { SafeUrlPipe } from '../../../shared/pipes/safe-url.pipe';
 import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
+import { StorageService } from '../../../core/storage.service';
 
 @Component({
   selector: 'app-resource-view',
@@ -16,11 +17,13 @@ import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/
 export class ResourceViewComponent implements OnInit {
   resource: any = null;
   isDeleteModalOpen = false;
+  isUploading = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private resourceService: ResourceService
+    private resourceService: ResourceService,
+    private storageService: StorageService
   ) {}
 
   async ngOnInit() {
@@ -34,6 +37,20 @@ export class ResourceViewComponent implements OnInit {
   async saveResource() {
     if (this.resource) {
       await this.resourceService.updateResource(this.resource.id, this.resource);
+    }
+  }
+
+  async onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (!file || !this.resource) return;
+
+    this.isUploading = true;
+    try {
+      const publicUrl = await this.storageService.uploadFile(this.resource.campaign_id, file);
+      this.resource.external_url = publicUrl;
+      await this.saveResource();
+    } finally {
+      this.isUploading = false;
     }
   }
 
