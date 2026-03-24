@@ -1,20 +1,26 @@
-<div class="npc-view-container" *ngIf="npc">
-  <div class="profile-panel">
-    <header class="npc-header">
-      <input type="text" [(ngModel)]="npc.name" class="name-input">
-      <div class="status-toggles">
-        <label>
-          <input type="checkbox" [(ngModel)]="npc.is_enemy"> Hostile
-        </label>
-      </div>
-    </header>
-    <div class="npc-details">
-      <input type="text" [(ngModel)]="npc.role" placeholder="Role..." class="detail-input">
-      <input type="text" [(ngModel)]="npc.status" placeholder="Status..." class="detail-input">
+<div class="view-container" *ngIf="npc">
+  <header class="view-header">
+    <input type="text" class="title-input" [(ngModel)]="npc.name" (change)="saveNpc()">
+    <button class="action-btn btn-danger" (click)="openDeleteModal()">[ DELETE NPC ]</button>
+  </header>
+
+  <div class="view-content">
+    <div class="hakari-form-group">
+      <label>ROLE / TITLE</label>
+      <input type="text" class="hakari-input" [(ngModel)]="npc.role" (change)="saveNpc()">
     </div>
-    <textarea class="description-area" [(ngModel)]="npc.description" placeholder="Description..."></textarea>
+    <div class="hakari-form-group">
+      <label>DESCRIPTION</label>
+      <textarea class="hakari-input description-area" [(ngModel)]="npc.description" (change)="saveNpc()"></textarea>
+    </div>
   </div>
-  <div class="relations-panel">
-    <app-relation-panel [entityType]="'npc'" [entityId]="npc.id"></app-relation-panel>
-  </div>
+
+  <app-confirm-modal
+    *ngIf="isDeleteModalOpen"
+    title="DELETE NPC"
+    message="This will permanently erase the entity from the campaign database. Proceed?"
+    confirmText="ERASE"
+    (confirm)="confirmDelete()"
+    (close)="closeDeleteModal()">
+  </app-confirm-modal>
 </div>

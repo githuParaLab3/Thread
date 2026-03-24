@@ -1,20 +1,33 @@
-<div class="page-container">
-  <div class="page-header">
-    <h2>Campaign Hub</h2>
-    <span class="hakari-badge">ID: {{ campaignId }}</span>
-  </div>
+<div class="page-container" *ngIf="campaign">
+  <header class="view-header">
+    <div class="header-content">
+      <span class="hakari-badge campaign-id-badge">ID: {{ campaign.id }}</span>
+      <input type="text" class="title-input" [(ngModel)]="campaign.name" (change)="saveCampaign()">
+      <textarea class="hakari-input description-area" [(ngModel)]="campaign.description" (change)="saveCampaign()" placeholder="Campaign Description..."></textarea>
+    </div>
+    <button class="action-btn btn-danger" (click)="openDeleteModal()">[ DELETE CAMPAIGN ]</button>
+  </header>
 
   <div class="hakari-grid">
-    <section class="hakari-card module-card">
+    <section class="hakari-card module-card" routerLink="sessions">
       <span class="material-symbols-outlined icon-large">view_timeline</span>
       <h3>Sessions</h3>
       <p>Manage timeline and events.</p>
     </section>
 
-    <section class="hakari-card module-card">
+    <section class="hakari-card module-card" routerLink="notes">
       <span class="material-symbols-outlined icon-large">public</span>
       <h3>Global Lore</h3>
       <p>Access notes, NPCs, and locations.</p>
     </section>
   </div>
+
+  <app-confirm-modal
+    *ngIf="isDeleteModalOpen"
+    title="CRITICAL: PURGE CAMPAIGN"
+    message="WARNING: This will permanently erase the ENTIRE campaign, including all sessions, NPCs, notes, and maps. This action is cascade-destructive and irreversible. Proceed?"
+    confirmText="ERASE ALL"
+    (confirm)="confirmDelete()"
+    (close)="closeDeleteModal()">
+  </app-confirm-modal>
 </div>

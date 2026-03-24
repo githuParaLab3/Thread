@@ -29,4 +29,19 @@ export class LocationService {
       .insert([{ campaign_id: campaignId, name, type }])
       .select();
   }
+
+  async updateLocation(id: string, updates: any) {
+    return this.supabaseService.client
+      .from('locations')
+      .update(updates)
+      .eq('id', id)
+      .select();
+  }
+
+  async deleteLocation(id: string) {
+    return this.supabaseService.client
+      .from('locations')
+      .delete()
+      .eq('id', id);
+  }
 }

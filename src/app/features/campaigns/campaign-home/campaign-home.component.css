@@ -1,52 +1,90 @@
 .page-container {
-  padding: 40px 32px;
-  max-width: 1200px;
-  margin: 0 auto;
-  width: 100%;
-  overflow-y: auto;
-}
-
-.page-header {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  border-bottom: 1px solid var(--border-color);
-  padding-bottom: 16px;
-  margin-bottom: 32px;
-}
-
-.page-header h2 {
-  font-size: 1.5rem;
+  padding: 32px;
   color: var(--text-primary);
-  margin: 0;
-  font-weight: 600;
-  text-transform: none;
-  letter-spacing: normal;
+}
+
+.view-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 40px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 24px;
+}
+
+.header-content {
+  flex: 1;
+  margin-right: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.campaign-id-badge {
+  align-self: flex-start;
+  margin-bottom: 16px;
+}
+
+.title-input {
+  font-size: 2.5rem;
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--highlight-primary);
+  font-family: var(--font-mono);
+  outline: none;
+  margin-bottom: 16px;
+  padding: 0;
+}
+
+.description-area {
+  width: 100%;
+  background: transparent;
+  border: 1px dashed var(--border-color);
+  color: var(--text-secondary);
+  min-height: 80px;
+  resize: vertical;
+  padding: 12px;
+  font-family: var(--font-primary);
+}
+
+.description-area:focus {
+  border-color: var(--highlight-primary);
+  background-color: var(--surface-hover);
+}
+
+.hakari-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
 }
 
 .module-card {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid var(--border-color);
+  background-color: var(--surface-color);
+}
+
+.module-card:hover {
+  border-color: var(--highlight-primary);
+  background-color: var(--surface-hover);
+  transform: translateY(-2px);
 }
 
 .icon-large {
   font-size: 32px;
-  color: var(--text-primary);
-  margin-bottom: 8px;
+  color: var(--highlight-primary);
+  margin-bottom: 16px;
 }
 
 .module-card h3 {
-  margin: 0;
-  font-size: 1.1rem;
+  margin: 0 0 8px 0;
+  font-family: var(--font-mono);
   color: var(--text-primary);
-  font-weight: 500;
-  text-transform: none;
-  letter-spacing: normal;
 }
 
 .module-card p {
   margin: 0;
-  font-size: 0.9rem;
   color: var(--text-secondary);
+  font-size: 0.9rem;
 }

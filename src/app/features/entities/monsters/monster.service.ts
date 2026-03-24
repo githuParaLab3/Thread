@@ -28,4 +28,19 @@ export class MonsterService {
       .insert([{ name }])
       .select();
   }
+
+  async updateMonster(id: string, updates: any) {
+    return this.supabaseService.client
+      .from('monsters')
+      .update(updates)
+      .eq('id', id)
+      .select();
+  }
+
+  async deleteMonster(id: string) {
+    return this.supabaseService.client
+      .from('monsters')
+      .delete()
+      .eq('id', id);
+  }
 }

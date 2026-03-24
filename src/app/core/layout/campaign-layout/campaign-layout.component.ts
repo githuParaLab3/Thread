@@ -6,7 +6,8 @@ import { Subscription, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ContextService } from '../../context.service';
 import { ThemeService } from '../../theme.service';
-import { GlobalSearchService, SearchResult } from '../../global-search.service';
+import { GlobalSearchService, SearchResult } from '../../../core/global-search.service';
+import { RealtimeSyncService } from '../../realtime-sync.service';
 
 @Component({
   selector: 'app-campaign-layout',
@@ -32,11 +33,13 @@ export class CampaignLayoutComponent implements OnInit, OnDestroy {
     private contextService: ContextService,
     public themeService: ThemeService,
     private globalSearch: GlobalSearchService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private realtimeSync: RealtimeSyncService
   ) {}
 
   ngOnInit() {
     this.campaignId = this.route.snapshot.firstChild?.paramMap.get('id') || null;
+    this.realtimeSync.initGlobalSubscription();
 
     this.contextSub = this.contextService.activeContext$.subscribe(context => {
       this.activeContext = context;

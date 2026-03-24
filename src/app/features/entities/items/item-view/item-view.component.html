@@ -1,16 +1,26 @@
-<div class="item-view-container" *ngIf="item">
-  <div class="profile-panel">
-    <header class="item-header">
-      <input type="text" [(ngModel)]="item.name" class="name-input">
-      <div class="value-wrapper">
-        <input type="number" [(ngModel)]="item.value" class="value-input">
-        <span>GP</span>
-      </div>
-    </header>
-    <textarea class="description-area" [(ngModel)]="item.description" placeholder="Item description..."></textarea>
+<div class="view-container" *ngIf="item">
+  <header class="view-header">
+    <input type="text" class="title-input" [(ngModel)]="item.name" (change)="saveItem()">
+    <button class="action-btn btn-danger" (click)="openDeleteModal()">[ DELETE ITEM ]</button>
+  </header>
+
+  <div class="view-content">
+    <div class="hakari-form-group">
+      <label>VALUE (GP)</label>
+      <input type="number" class="hakari-input" [(ngModel)]="item.value" (change)="saveItem()">
+    </div>
+    <div class="hakari-form-group">
+      <label>DESCRIPTION</label>
+      <textarea class="hakari-input description-area" [(ngModel)]="item.description" (change)="saveItem()"></textarea>
+    </div>
   </div>
-  <div class="relations-panel">
-    <h4>OWNED BY</h4>
-    <h4>LINKED NOTES</h4>
-  </div>
+
+  <app-confirm-modal
+    *ngIf="isDeleteModalOpen"
+    title="DELETE ITEM"
+    message="This will permanently erase the entity from the campaign database. Proceed?"
+    confirmText="ERASE"
+    (confirm)="confirmDelete()"
+    (close)="closeDeleteModal()">
+  </app-confirm-modal>
 </div>

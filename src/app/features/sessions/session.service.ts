@@ -29,4 +29,19 @@ export class SessionService {
       .insert([{ campaign_id: campaignId, number, title, summary }])
       .select();
   }
+
+  async updateSession(id: string, updates: any) {
+    return this.supabaseService.client
+      .from('sessions')
+      .update(updates)
+      .eq('id', id)
+      .select();
+  }
+
+  async deleteSession(id: string) {
+    return this.supabaseService.client
+      .from('sessions')
+      .delete()
+      .eq('id', id);
+  }
 }

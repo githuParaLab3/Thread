@@ -12,7 +12,7 @@ export class NoteService {
       .from('notes')
       .select('*')
       .eq('campaign_id', campaignId)
-      .order('updated_at', { ascending: false });
+      .order('title', { ascending: true });
   }
 
   async getNote(id: string) {
@@ -28,5 +28,20 @@ export class NoteService {
       .from('notes')
       .insert([{ campaign_id: campaignId, title, type }])
       .select();
+  }
+
+  async updateNote(id: string, updates: any) {
+    return this.supabaseService.client
+      .from('notes')
+      .update(updates)
+      .eq('id', id)
+      .select();
+  }
+
+  async deleteNote(id: string) {
+    return this.supabaseService.client
+      .from('notes')
+      .delete()
+      .eq('id', id);
   }
 }

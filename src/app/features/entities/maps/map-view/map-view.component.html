@@ -1,14 +1,31 @@
-<div class="map-view-container" *ngIf="mapData">
-  <div class="profile-panel">
-    <header class="map-header">
-      <input type="text" [(ngModel)]="mapData.name" class="name-input">
-      <input type="text" [(ngModel)]="mapData.type" placeholder="Map Type..." class="type-input">
-    </header>
-    <div class="image-url-wrapper">
-      <input type="text" [(ngModel)]="mapData.image_url" placeholder="Image URL..." class="url-input">
+<div class="view-container" *ngIf="mapData">
+  <header class="view-header">
+    <input type="text" class="title-input" [(ngModel)]="mapData.name" (change)="saveMap()">
+    <button class="action-btn btn-danger" (click)="openDeleteModal()">[ DELETE MAP ]</button>
+  </header>
+
+  <div class="view-content">
+    <div class="hakari-form-group">
+      <label>TYPE</label>
+      <select class="hakari-input" [(ngModel)]="mapData.type" (change)="saveMap()">
+        <option value="Regional">Regional</option>
+        <option value="Dungeon">Dungeon</option>
+        <option value="City">City</option>
+        <option value="Battlemap">Battlemap</option>
+      </select>
+    </div>
+    <div class="hakari-form-group">
+      <label>DESCRIPTION / NOTES</label>
+      <textarea class="hakari-input description-area" [(ngModel)]="mapData.description" (change)="saveMap()"></textarea>
     </div>
   </div>
-  <div class="relations-panel">
-    <h4>LINKED LOCATIONS</h4>
-  </div>
+
+  <app-confirm-modal
+    *ngIf="isDeleteModalOpen"
+    title="DELETE MAP"
+    message="This will permanently erase the entity from the campaign database. Proceed?"
+    confirmText="ERASE"
+    (confirm)="confirmDelete()"
+    (close)="closeDeleteModal()">
+  </app-confirm-modal>
 </div>

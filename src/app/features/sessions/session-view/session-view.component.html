@@ -1,18 +1,37 @@
 <div class="session-view-container" *ngIf="session">
-  <div class="left-panel">
-    <app-relation-panel [entityType]="'session'" [entityId]="session.id"></app-relation-panel>
-  </div>
-  
-  <div class="center-panel">
-    <header class="session-header">
-      <h2>#{{ session.number }} - {{ session.title }}</h2>
-      <span class="date">{{ session.date | date:'shortDate' }}</span>
-    </header>
-    <div class="split-view">
-      <textarea class="editor-area" [(ngModel)]="session.summary" placeholder="Session notes..."></textarea>
-      <div class="board-area">
-        <app-session-board [sessionId]="session.id"></app-session-board>
-      </div>
+  <div class="session-header">
+    <div class="session-meta">
+      <span class="session-number">#{{ session.number }}</span>
+      <input type="text" [(ngModel)]="session.title" class="title-input" (change)="saveSession()">
+    </div>
+    <div class="header-actions">
+      <button class="action-btn btn-danger" (click)="openDeleteModal()">[ DELETE SESSION ]</button>
     </div>
   </div>
+
+  <div class="session-content">
+    <div class="main-panel">
+      <div class="hakari-form-group">
+        <label>SUMMARY</label>
+        <textarea class="hakari-input description-area" [(ngModel)]="session.summary" (change)="saveSession()"></textarea>
+      </div>
+      <div class="hakari-form-group">
+        <label>FULL LOG</label>
+        <textarea class="hakari-input log-area" [(ngModel)]="session.log" (change)="saveSession()"></textarea>
+      </div>
+    </div>
+
+    <div class="board-panel">
+      <app-session-board [sessionId]="session.id"></app-session-board>
+    </div>
+  </div>
+
+  <app-confirm-modal
+    *ngIf="isDeleteModalOpen"
+    title="DELETE SESSION"
+    message="This will permanently erase the session and its board layout. Proceed?"
+    confirmText="ERASE"
+    (confirm)="confirmDelete()"
+    (close)="closeDeleteModal()">
+  </app-confirm-modal>
 </div>

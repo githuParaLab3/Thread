@@ -29,4 +29,19 @@ export class ItemService {
       .insert([{ campaign_id: campaignId, name, value }])
       .select();
   }
+
+  async updateItem(id: string, updates: any) {
+    return this.supabaseService.client
+      .from('items')
+      .update(updates)
+      .eq('id', id)
+      .select();
+  }
+
+  async deleteItem(id: string) {
+    return this.supabaseService.client
+      .from('items')
+      .delete()
+      .eq('id', id);
+  }
 }

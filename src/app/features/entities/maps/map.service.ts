@@ -29,4 +29,19 @@ export class MapService {
       .insert([{ campaign_id: campaignId, name, type }])
       .select();
   }
+
+  async updateMap(id: string, updates: any) {
+    return this.supabaseService.client
+      .from('maps')
+      .update(updates)
+      .eq('id', id)
+      .select();
+  }
+
+  async deleteMap(id: string) {
+    return this.supabaseService.client
+      .from('maps')
+      .delete()
+      .eq('id', id);
+  }
 }

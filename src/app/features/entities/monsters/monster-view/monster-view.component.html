@@ -1,8 +1,22 @@
-<div class="monster-view-container" *ngIf="monster">
-  <div class="profile-panel">
-    <header class="monster-header">
-      <input type="text" [(ngModel)]="monster.name" class="name-input">
-    </header>
-    <textarea class="description-area" [(ngModel)]="monster.description" placeholder="Monster stats and details..."></textarea>
+<div class="view-container" *ngIf="monster">
+  <header class="view-header">
+    <input type="text" class="title-input" [(ngModel)]="monster.name" (change)="saveMonster()">
+    <button class="action-btn btn-danger" (click)="openDeleteModal()">[ DELETE MONSTER ]</button>
+  </header>
+
+  <div class="view-content">
+    <div class="hakari-form-group">
+      <label>STATBLOCK / DETAILS</label>
+      <textarea class="hakari-input description-area" [(ngModel)]="monster.stats" (change)="saveMonster()"></textarea>
+    </div>
   </div>
+
+  <app-confirm-modal
+    *ngIf="isDeleteModalOpen"
+    title="DELETE MONSTER"
+    message="This will permanently erase the entity from the campaign database. Proceed?"
+    confirmText="ERASE"
+    (confirm)="confirmDelete()"
+    (close)="closeDeleteModal()">
+  </app-confirm-modal>
 </div>

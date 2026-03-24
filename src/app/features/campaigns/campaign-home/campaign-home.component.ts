@@ -1,20 +1,56 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { CampaignService } from '../campaign.service';
+import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-campaign-home',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule, ConfirmModalComponent],
   templateUrl: './campaign-home.component.html',
   styleUrls: ['./campaign-home.component.css']
 })
 export class CampaignHomeComponent implements OnInit {
-  campaignId: string | null = null;
+  campaign: any = null;
+  isDeleteModalOpen = false;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private campaignService: CampaignService
+  ) {}
 
-  ngOnInit() {
-    this.campaignId = this.route.snapshot.paramMap.get('id');
+  async ngOnInit() {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      const { data } = await this.campaignService.getCampaign(id);
+      this.campaign = data;
+    }
+  }
+
+  async saveCampaign() {
+    if (this.campaign) {
+      await this.campaignService.updateCampaign(this.campaign.id, {
+        name: this.campaign.name,
+        description: this.campaign.description
+      });
+    }
+  }
+
+  openDeleteModal() {
+    this.isDeleteModalOpen = true;
+  }
+
+  closeDeleteModal() {
+    this.isDeleteModalOpen = false;
+  }
+
+  async confirmDelete() {
+    if (this.campaign) {
+      await this.campaignService.deleteCampaign(this.campaign.id);
+      this.router.navigate(['/dashboard']);
+    }
   }
 }

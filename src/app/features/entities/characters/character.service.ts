@@ -29,4 +29,19 @@ export class CharacterService {
       .insert([{ campaign_id: campaignId, name, class: charClass }])
       .select();
   }
+
+  async updateCharacter(id: string, updates: any) {
+    return this.supabaseService.client
+      .from('characters')
+      .update(updates)
+      .eq('id', id)
+      .select();
+  }
+
+  async deleteCharacter(id: string) {
+    return this.supabaseService.client
+      .from('characters')
+      .delete()
+      .eq('id', id);
+  }
 }

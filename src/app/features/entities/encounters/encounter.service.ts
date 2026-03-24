@@ -29,4 +29,19 @@ export class EncounterService {
       .insert([{ campaign_id: campaignId, name, difficulty }])
       .select();
   }
+
+  async updateEncounter(id: string, updates: any) {
+    return this.supabaseService.client
+      .from('encounters')
+      .update(updates)
+      .eq('id', id)
+      .select();
+  }
+
+  async deleteEncounter(id: string) {
+    return this.supabaseService.client
+      .from('encounters')
+      .delete()
+      .eq('id', id);
+  }
 }

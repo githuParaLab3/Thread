@@ -29,4 +29,19 @@ export class NpcService {
       .insert([{ campaign_id: campaignId, name, role }])
       .select();
   }
+
+  async updateNpc(id: string, updates: any) {
+    return this.supabaseService.client
+      .from('npcs')
+      .update(updates)
+      .eq('id', id)
+      .select();
+  }
+
+  async deleteNpc(id: string) {
+    return this.supabaseService.client
+      .from('npcs')
+      .delete()
+      .eq('id', id);
+  }
 }

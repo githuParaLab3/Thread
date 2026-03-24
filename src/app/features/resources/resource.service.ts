@@ -15,7 +15,7 @@ export class ResourceService {
       .order('title', { ascending: true });
   }
 
-  async getResourceById(id: string) {
+  async getResource(id: string) {
     return this.supabaseService.client
       .from('resources')
       .select('*')

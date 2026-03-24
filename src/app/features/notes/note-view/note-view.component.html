@@ -1,13 +1,31 @@
-<div class="note-view-container" *ngIf="note">
-  <div class="editor-panel">
-    <header class="note-header">
-      <input type="text" [(ngModel)]="note.title" class="title-input">
-      <span class="type-badge">{{ note.type }}</span>
-    </header>
-    <textarea class="content-area" [(ngModel)]="note.content" placeholder="Content..."></textarea>
+<div class="view-container" *ngIf="note">
+  <header class="view-header">
+    <input type="text" class="title-input" [(ngModel)]="note.title" (change)="saveNote()">
+    <button class="action-btn btn-danger" (click)="openDeleteModal()">[ DELETE NOTE ]</button>
+  </header>
+
+  <div class="view-content">
+    <div class="hakari-form-group">
+      <label>TYPE</label>
+      <select class="hakari-input" [(ngModel)]="note.type" (change)="saveNote()">
+        <option value="lore">Lore</option>
+        <option value="event">Event</option>
+        <option value="consequence">Consequence</option>
+        <option value="idea">Idea</option>
+      </select>
+    </div>
+    <div class="hakari-form-group">
+      <label>CONTENT</label>
+      <textarea class="hakari-input description-area" [(ngModel)]="note.content" (change)="saveNote()"></textarea>
+    </div>
   </div>
-  
-  <div class="relations-panel">
-    <app-relation-panel [entityType]="'note'" [entityId]="note.id"></app-relation-panel>
-  </div>
+
+  <app-confirm-modal
+    *ngIf="isDeleteModalOpen"
+    title="DELETE NOTE"
+    message="This will permanently erase the entity from the campaign database. Proceed?"
+    confirmText="ERASE"
+    (confirm)="confirmDelete()"
+    (close)="closeDeleteModal()">
+  </app-confirm-modal>
 </div>

@@ -4,20 +4,35 @@
       <span class="resource-type">{{ resource.type }}</span>
     </div>
     <input type="text" class="title-input" [(ngModel)]="resource.title" (change)="saveResource()">
+    <button class="action-btn btn-danger" (click)="openDeleteModal()">[ DELETE ]</button>
   </header>
 
-  <div class="view-content">
+  <div class="view-content" style="padding: 24px;">
     <div class="hakari-form-group">
-      <label>SOURCE URL / CONTENT PATH</label>
-      <input type="text" class="hakari-input" [(ngModel)]="resource.content" (change)="saveResource()" placeholder="https://...">
+      <label>EXTERNAL URL / SECURE PATH</label>
+      <input type="text" class="hakari-input" [(ngModel)]="resource.external_url" (change)="saveResource()" placeholder="https://...">
     </div>
 
-    <div class="resource-preview" *ngIf="resource.content && (resource.type === 'URL' || resource.type === 'PDF')">
-      <iframe [src]="resource.content | safeUrl" width="100%" height="700px" frameborder="0" style="border-radius: var(--radius-sm); border: 1px solid var(--border-color);"></iframe>
+    <div class="resource-preview" *ngIf="resource.external_url && (resource.type === 'URL' || resource.type === 'PDF')" style="margin-top: 24px;">
+      <iframe [src]="resource.external_url | safeUrl" width="100%" height="700px" frameborder="0" style="border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: #fff;"></iframe>
     </div>
 
-    <div class="resource-preview" *ngIf="resource.content && resource.type === 'Image'">
-      <img [src]="resource.content" alt="Resource content" style="max-width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+    <div class="resource-preview" *ngIf="resource.external_url && resource.type === 'Image'" style="margin-top: 24px;">
+      <img [src]="resource.external_url" alt="Resource content" style="max-width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+    </div>
+
+    <div class="hakari-form-group" style="margin-top: 24px;">
+      <label>NOTES / DESCRIPTION</label>
+      <textarea class="hakari-input description-area" [(ngModel)]="resource.description" (change)="saveResource()" placeholder="Description..."></textarea>
     </div>
   </div>
+
+  <app-confirm-modal
+    *ngIf="isDeleteModalOpen"
+    title="DELETE RESOURCE"
+    message="This will permanently erase the entity from the campaign database. Proceed?"
+    confirmText="ERASE"
+    (confirm)="confirmDelete()"
+    (close)="closeDeleteModal()">
+  </app-confirm-modal>
 </div>

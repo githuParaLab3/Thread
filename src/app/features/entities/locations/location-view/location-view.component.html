@@ -1,12 +1,26 @@
-<div class="location-view-container" *ngIf="location">
-  <div class="profile-panel">
-    <header class="location-header">
-      <input type="text" [(ngModel)]="location.name" class="name-input">
-      <input type="text" [(ngModel)]="location.type" placeholder="Type..." class="type-input">
-    </header>
-    <textarea class="description-area" [(ngModel)]="location.description" placeholder="Location description..."></textarea>
+<div class="view-container" *ngIf="location">
+  <header class="view-header">
+    <input type="text" class="title-input" [(ngModel)]="location.name" (change)="saveLocation()">
+    <button class="action-btn btn-danger" (click)="openDeleteModal()">[ DELETE LOCATION ]</button>
+  </header>
+
+  <div class="view-content">
+    <div class="hakari-form-group">
+      <label>TYPE</label>
+      <input type="text" class="hakari-input" [(ngModel)]="location.type" (change)="saveLocation()">
+    </div>
+    <div class="hakari-form-group">
+      <label>DESCRIPTION</label>
+      <textarea class="hakari-input description-area" [(ngModel)]="location.description" (change)="saveLocation()"></textarea>
+    </div>
   </div>
-  <div class="relations-panel">
-    <app-relation-panel [entityType]="'location'" [entityId]="location.id"></app-relation-panel>
-  </div>
+
+  <app-confirm-modal
+    *ngIf="isDeleteModalOpen"
+    title="DELETE LOCATION"
+    message="This will permanently erase the entity from the campaign database. Proceed?"
+    confirmText="ERASE"
+    (confirm)="confirmDelete()"
+    (close)="closeDeleteModal()">
+  </app-confirm-modal>
 </div>
