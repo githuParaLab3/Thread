@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
-    this.authService.authChanges()((event, session) => {
+    this.authService.authChanges((event: string, session: any) => {
       if (event === 'SIGNED_IN') {
         this.router.navigate(['/dashboard']);
       } else if (event === 'SIGNED_OUT') {

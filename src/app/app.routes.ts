@@ -14,6 +14,10 @@ export const routes: Routes = [
     path: 'login',
     loadComponent: () => import('./features/auth/login/login.component').then(m => m.LoginComponent)
   },
+  { 
+    path: 'update-password', 
+    loadComponent: () => import('./features/auth/update-password/update-password.component').then(m => m.UpdatePasswordComponent) 
+  },
   {
     path: '',
     component: LayoutComponent,

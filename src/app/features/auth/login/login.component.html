@@ -14,20 +14,54 @@
   <main class="login-content">
     <div class="login-card">
       <div class="card-header">
-        <h1>Welcome</h1>
-        <p>Log in or create an account to access the system.</p>
+        <h1 *ngIf="isForgotPasswordMode">Reset Password</h1>
+        <h1 *ngIf="!isForgotPasswordMode">{{ isLoginMode ? 'Sign In' : 'Create Account' }}</h1>
+        <p *ngIf="isForgotPasswordMode">Enter your email to receive recovery instructions.</p>
+        <p *ngIf="!isForgotPasswordMode">Access the campaign management system.</p>
       </div>
 
       <div class="card-body">
-        <button class="btn-primary" (click)="login()" [disabled]="loading">
-          <span class="material-symbols-outlined" *ngIf="!loading">login</span>
-          <span *ngIf="!loading">Sign in with Google</span>
-          <span *ngIf="loading">Signing in...</span>
-        </button>
-        
-        <div class="error-msg" *ngIf="errorMessage">
-          {{ errorMessage }}
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" class="form-input" [(ngModel)]="email" placeholder="name@domain.com" [disabled]="loading">
         </div>
+
+        <div class="form-group" *ngIf="!isForgotPasswordMode">
+          <label>Password</label>
+          <input type="password" class="form-input" [(ngModel)]="password" placeholder="••••••••" [disabled]="loading">
+        </div>
+
+        <div class="forgot-link-container" *ngIf="isLoginMode && !isForgotPasswordMode">
+          <span class="text-link" (click)="toggleForgotPassword()">Forgot your password?</span>
+        </div>
+
+        <div class="error-msg" *ngIf="errorMessage">{{ errorMessage }}</div>
+        <div class="success-msg" *ngIf="successMessage">{{ successMessage }}</div>
+
+        <button class="btn-primary full-width" (click)="submitForm()" [disabled]="loading">
+          <span *ngIf="!loading">
+            {{ isForgotPasswordMode ? 'Send Recovery Email' : (isLoginMode ? 'Sign In' : 'Register') }}
+          </span>
+          <span *ngIf="loading">Processing...</span>
+        </button>
+
+        <div class="toggle-container" *ngIf="!loading">
+          <span class="text-link" (click)="isForgotPasswordMode ? cancelForgotPassword() : toggleMode()">
+            {{ isForgotPasswordMode ? 'Return to sign in' : (isLoginMode ? 'No account? Register here.' : 'Already have an account? Sign in.') }}
+          </span>
+        </div>
+
+        <div class="divider" *ngIf="!isForgotPasswordMode">
+          <div class="line"></div>
+          <span>OR</span>
+          <div class="line"></div>
+        </div>
+
+        <button class="btn-google full-width" *ngIf="!isForgotPasswordMode" (click)="loginWithGoogle()" [disabled]="loading">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
+          <span *ngIf="!loading">Continue with Google</span>
+          <span *ngIf="loading">Processing...</span>
+        </button>
       </div>
     </div>
   </main>

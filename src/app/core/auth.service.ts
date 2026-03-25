@@ -5,30 +5,41 @@ import { SupabaseService } from './supabase.service';
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private supabaseService: SupabaseService) {}
+  constructor(private supabase: SupabaseService) {}
+
+  get session() {
+    return this.supabase.client.auth.getSession();
+  }
+
+  authChanges(callback: (event: string, session: any) => void) {
+    return this.supabase.client.auth.onAuthStateChange(callback);
+  }
 
   async signInWithGoogle() {
-      return this.supabaseService.client.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: window.location.origin + '/dashboard'
-        }
-      });
+    return this.supabase.client.auth.signInWithOAuth({
+      provider: 'google',
+    });
+  }
+
+  async signInWithEmail(email: string, password: string) {
+    return this.supabase.client.auth.signInWithPassword({ email, password });
+  }
+
+  async signUp(email: string, password: string) {
+    return this.supabase.client.auth.signUp({ email, password });
+  }
+
+  async resetPasswordForEmail(email: string) {
+    return this.supabase.client.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + '/update-password',
+    });
+  }
+
+  async updateUserPassword(password: string) {
+    return this.supabase.client.auth.updateUser({ password });
   }
 
   async signOut() {
-    return this.supabaseService.client.auth.signOut();
-  }
-
-  get user() {
-    return this.supabaseService.client.auth.getUser();
-  }
-
-  get session() {
-    return this.supabaseService.client.auth.getSession();
-  }
-
-  authChanges() {
-    return this.supabaseService.client.auth.onAuthStateChange;
+    return this.supabase.client.auth.signOut();
   }
 }
